@@ -4,3 +4,4 @@ dist/
 .screeps.json
 .clj-kondo/
 .lsp/
+src/thornjad/screeps/version.cljs
