@@ -38,9 +38,3 @@ deploy:
 
 test:
 	npm test
-
-test-unit:
-	npm run test-unit
-
-test-integration:
-	npm run test-integration
