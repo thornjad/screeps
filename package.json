@@ -7,12 +7,17 @@
     "build": "shadow-cljs release main",
     "dev": "shadow-cljs watch main",
     "repl": "shadow-cljs clj-repl",
-    "deploy": "grunt screeps"
+    "deploy": "grunt screeps",
+    "test": "npm run test-unit",
+    "test-unit": "mocha test/unit/**/*.test.js",
+    "test-integration": "npm run build && mocha test/integration/**/*.test.js"
   },
   "devDependencies": {
     "shadow-cljs": "^2.28.10",
     "grunt": "^1.6.1",
-    "grunt-screeps": "^1.5.0"
+    "grunt-screeps": "^1.5.0",
+    "mocha": "^10.2.0",
+    "screeps-server-mockup": "^5.0.1"
   },
   "dependencies": {}
 }

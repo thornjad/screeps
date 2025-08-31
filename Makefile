@@ -1,4 +1,4 @@
-.PHONY: install dev build clean repl deploy version-file version-patch version-minor version-major
+.PHONY: install dev build clean repl deploy version-file version-patch version-minor version-major test test-unit test-integration
 
 install:
 	npm install
@@ -35,3 +35,12 @@ repl:
 
 deploy:
 	npx grunt screeps
+
+test:
+	npm test
+
+test-unit:
+	npm run test-unit
+
+test-integration:
+	npm run test-integration
