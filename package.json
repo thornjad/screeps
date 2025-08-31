@@ -1,6 +1,6 @@
 {
   "name": "thornjad-screeps-ai",
-  "version": "1.0.0",
+  "version": "0.1.0",
   "description": "ClojureScript AI for Screeps",
   "main": "dist/main.js",
   "scripts": {
