@@ -1,0 +1,7 @@
+{:source-paths ["src"]
+ :dependencies []
+ :builds
+ {:main
+  {:target     :node-script
+   :main       thornjad.screeps.core
+   :output-to  "dist/main.js"}}}

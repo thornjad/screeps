@@ -1,0 +1,18 @@
+{
+  "name": "thornjad-screeps-ai",
+  "version": "1.0.0",
+  "description": "ClojureScript AI for Screeps",
+  "main": "dist/main.js",
+  "scripts": {
+    "build": "shadow-cljs release main",
+    "dev": "shadow-cljs watch main",
+    "repl": "shadow-cljs clj-repl",
+    "deploy": "grunt screeps"
+  },
+  "devDependencies": {
+    "shadow-cljs": "^2.28.10",
+    "grunt": "^1.6.1",
+    "grunt-screeps": "^1.5.0"
+  },
+  "dependencies": {}
+}

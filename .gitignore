@@ -1,0 +1,6 @@
+node_modules/
+dist/
+.shadow-cljs/
+.screeps.json
+.clj-kondo/
+.lsp/
