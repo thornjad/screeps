@@ -6,6 +6,12 @@
 (defn game-loop []
   (js/console.log (str "Running Thornjad Screeps AI v" version/version))
 
+  ;; Clean up memory for dead creeps
+  (doseq [creep-name (js/Object.keys js/Memory.creeps)]
+    (when-not (aget js/Game.creeps creep-name)
+      (js/console.log (str "Cleaning up memory for dead creep: " creep-name))
+      (js-delete js/Memory.creeps creep-name)))
+
   ;; Spawn creeps if we have energy and need workers
   (doseq [spawn-name (js/Object.keys js/Game.spawns)]
     (let [spawn (aget js/Game.spawns spawn-name)
@@ -21,7 +27,7 @@
   ;; Manage existing creeps
   (doseq [creep-name (js/Object.keys js/Game.creeps)]
     (let [creep (aget js/Game.creeps creep-name)]
-      (when (aget creep "room")  ;; Only proceed if creep has a room
+      (when (and creep (aget creep "room"))  ;; Only proceed if creep exists and has room
       (let [creep-energy (utils/get-energy creep)
             creep-capacity (utils/get-capacity creep)]
         (js/console.log (str "Creep " creep-name " has " creep-energy "/" creep-capacity " energy"))
@@ -30,13 +36,21 @@
           (let [sources (utils/find-in-room (aget creep "room") js/FIND_SOURCES)]
             (js/console.log (str "Found " (alength sources) " sources"))
             (when (pos? (alength sources))
-              (let [harvest-result (utils/harvest creep (aget sources 0))]
-                (if (= harvest-result js/ERR_NOT_IN_RANGE)
-                  (let [move-result (utils/move-to creep (aget sources 0))]
-                    (js/console.log (str "Moving to source, result: " move-result)))))))
+              (let [closest-source (if (.-pos creep)
+                                    (utils/find-closest creep sources)
+                                    (aget sources 0))]
+                (js/console.log (str "Creep pos: " (boolean (.-pos creep)) ", Targeting closest source: " (boolean closest-source)))
+                (when closest-source
+                  (let [harvest-result (utils/harvest creep closest-source)]
+                    (if (= harvest-result js/ERR_NOT_IN_RANGE)
+                      (let [move-result (utils/move-to creep closest-source)]
+                        (js/console.log (str "Moving to source, result: " move-result)))))))))
           ;; Transfer energy to spawn if full
-          (let [spawn (utils/find-closest creep (utils/find-in-room (aget creep "room") js/FIND_MY_SPAWNS))]
-            (js/console.log (str "Found spawn: " (boolean spawn)))
+          (let [spawns (utils/find-in-room (aget creep "room") js/FIND_MY_SPAWNS)
+                spawn (if (.-pos creep)
+                       (utils/find-closest creep spawns)
+                       (when (pos? (alength spawns)) (aget spawns 0)))]
+            (js/console.log (str "Found " (alength spawns) " spawns, selected spawn: " (boolean spawn)))
             (when spawn
               (let [transfer-result (utils/transfer creep spawn js/RESOURCE_ENERGY)]
                 (js/console.log (str "Transfer result: " transfer-result))

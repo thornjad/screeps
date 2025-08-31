@@ -36,4 +36,5 @@
 
 (defn find-closest [creep objects]
   "Find closest object to creep"
-  (js-invoke creep "findClosestByPath" objects))
+  (when-let [pos (.-pos creep)]
+    (js-invoke pos "findClosestByPath" objects)))
